@@ -2,26 +2,38 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>ПроЗабор55 - Установим забор дешевле конкурентов</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
-        /* Базовые стили для секций */
+        /* ----- Базовые сбросы и общие стили ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            overflow-x: hidden;
+        }
+
         .section {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 80px 20px;
+            padding: 60px 20px;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             text-align: center;
+            width: 100%;
         }
 
-        /* ========== ВЕРХНЯЯ СТРОКА (ШАПКА) - ЗАКРЕПЛЕНА ========== */
+        /* ========== ВЕРХНЯЯ СТРОКА (ШАПКА) - ПО УМОЛЧАНИЮ ВИДНА ТОЛЬКО НА ДЕСКТОПЕ ========== */
         .top-bar {
             position: fixed;
             top: 0;
@@ -118,17 +130,15 @@
         }
 
         /* ========== СТИЛИ ДЛЯ ПЕРВОЙ СЕКЦИИ ========== */
-        /* Добавляем отступ сверху, чтобы контент не прятался под шапку */
         #section1 {
             background-image: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url('{{ url_for('static', filename='images/company-bg.jpg') }}');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
+            background-attachment: fixed;  /* на десктопе fixed */
             color: white;
             position: relative;
             overflow: hidden;
-            padding-top: 140px; /* КЛЮЧЕВОЕ: отступ, чтобы шапка не перекрывала фон */
-            margin-top: 0;
+            padding-top: 140px; /* отступ для шапки на десктопе */
         }
 
         .animated-title {
@@ -225,7 +235,7 @@
             transform: scale(1.05);
         }
 
-        /* ========== СТИЛИ ДЛЯ ВТОРОЙ СЕКЦИИ (УСЛУГИ) ========== */
+        /* ========== ВТОРАЯ СЕКЦИЯ ========== */
         #section2 {
             background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('{{ url_for('static', filename='images/services.jpg') }}');
             background-size: cover;
@@ -246,10 +256,6 @@
             line-height: 1.6;
             font-weight: 400;
             margin-bottom: 20px;
-        }
-
-        .services-description p:last-child {
-            margin-bottom: 0;
         }
 
         .two-columns {
@@ -321,7 +327,7 @@
             transform: scale(1.05);
         }
 
-        /* ========== СТИЛИ ДЛЯ ТРЕТЬЕЙ СЕКЦИИ (КАТАЛОГ) ========== */
+        /* ========== ТРЕТЬЯ СЕКЦИЯ (КАТАЛОГ) ========== */
         #section3 {
             background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{{ url_for('static', filename='images/catalog.jpg') }}');
             background-size: cover;
@@ -385,7 +391,7 @@
             transform: scale(1.05);
         }
 
-        /* ========== СТИЛИ ДЛЯ ЧЕТВЁРТОЙ СЕКЦИИ (КОНТАКТЫ) ========== */
+        /* ========== ЧЕТВЁРТАЯ СЕКЦИЯ (КОНТАКТЫ И ФОРМА) ========== */
         #section4 {
             background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{{ url_for('static', filename='images/svyaz.jpg') }}');
             background-size: cover;
@@ -402,7 +408,6 @@
             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
 
-        /* Стили для формы */
         .contact-form {
             max-width: 400px;
             margin: 0 auto;
@@ -422,22 +427,24 @@
 
         .form-group input {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 16px;
+            background: rgba(255,255,255,0.95);
         }
 
         .submit-btn {
             background: #e74c3c;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 12px 20px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
             width: 100%;
             font-weight: bold;
+            transition: background 0.3s;
         }
 
         .submit-btn:hover {
@@ -448,9 +455,49 @@
             margin-top: 15px;
             text-align: center;
             color: white;
+            font-weight: 500;
         }
 
-        /* Стили для навигационных кнопок */
+        /* БЛОК КОНТАКТОВ ДЛЯ МОБИЛЬНЫХ (появляется только на телефонах) */
+        .mobile-contacts {
+            display: none;
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .mobile-contacts h4 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #e74c3c;
+        }
+
+        .mobile-contacts .mobile-phone,
+        .mobile-contacts .mobile-email {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .mobile-contacts a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .mobile-contacts a:hover {
+            color: #3498db;
+        }
+
+        /* Навигационные кнопки справа */
         .nav-buttons {
             position: fixed;
             right: 20px;
@@ -480,77 +527,76 @@
             transform: scale(1.05);
         }
 
-        /* Адаптивность */
+        /* ========== МОБИЛЬНАЯ АДАПТАЦИЯ ========== */
         @media (max-width: 768px) {
-            .top-bar .container {
-                flex-direction: column;
-                text-align: center;
-                gap: 15px;
+            /* 1. Скрываем верхнюю фиксированную шапку полностью */
+            .top-bar {
+                display: none;
             }
-            
-            .phones-block {
-                align-items: center;
+
+            /* 2. Убираем лишний отступ у первой секции (шапки больше нет) */
+            #section1 {
+                padding-top: 60px;   /* небольшой отступ для воздуха, но без шапки */
+                background-attachment: scroll; /* фикс фона на мобильных (fixed глючит) */
             }
-            
-            .right-block {
-                justify-content: center;
+
+            /* 3. У всех секций с fixed фоном меняем на scroll для корректного отображения */
+            #section2,
+            #section3,
+            #section4 {
+                background-attachment: scroll;
             }
-            
-            .nav-buttons {
-                right: 10px;
+
+            /* 4. Показываем блок мобильных контактов внутри 4 секции (под формой) */
+            .mobile-contacts {
+                display: block;
             }
-            
-            .nav-buttons button {
-                padding: 6px 10px;
-                font-size: 10px;
-            }
-            
+
+            /* Корректировка размеров шрифтов и отступов */
             .animated-title h1 {
-                font-size: 1.6rem;
+                font-size: 1.8rem;
             }
-            
             .animated-title .subtitle {
-                font-size: 1rem;
+                font-size: 1.1rem;
             }
-            
-            .site-name {
-                font-size: 1.4rem;
-            }
-            
-            .phones-block a,
-            .email-link {
-                font-size: 0.9rem;
-            }
-            
-            .order-btn {
-                padding: 8px 20px;
-                font-size: 14px;
-            }
-            
             .hero-btn, .hero-btn-outline {
-                padding: 10px 25px;
-                font-size: 1rem;
+                padding: 10px 22px;
+                font-size: 0.95rem;
             }
-            
             .services-description p {
                 font-size: 1rem;
             }
-            
+            .col h3 {
+                font-size: 1.3rem;
+            }
+            #section3 h2 {
+                font-size: 2rem;
+            }
+            .catalog-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
             .catalog-item h3 {
                 font-size: 1rem;
             }
-            
-            .catalog-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
             .contact-text {
                 font-size: 1.1rem;
             }
-            
-            /* Увеличиваем отступ на мобильных, так как шапка выше */
-            #section1 {
-                padding-top: 200px;
+            .nav-buttons {
+                right: 10px;
+            }
+            .nav-buttons button {
+                padding: 6px 12px;
+                font-size: 11px;
+            }
+            .section {
+                padding: 50px 16px;
+            }
+            .two-columns {
+                gap: 25px;
+            }
+            .col {
+                min-width: 100%;
             }
         }
 
@@ -558,16 +604,30 @@
             .catalog-grid {
                 grid-template-columns: 1fr;
             }
-            
             #section1 {
-                padding-top: 220px;
+                padding-top: 40px;
+            }
+            .animated-title h1 {
+                font-size: 1.6rem;
+            }
+            .hero-buttons {
+                gap: 12px;
+            }
+            .hero-btn, .hero-btn-outline {
+                padding: 8px 18px;
+                font-size: 0.9rem;
+            }
+            .mobile-contacts .mobile-phone,
+            .mobile-contacts .mobile-email {
+                font-size: 1rem;
+                flex-wrap: wrap;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- ========== ВЕРХНЯЯ СТРОКА (ШАПКА) - НЕПОДВИЖНА ========== -->
+    <!-- ========== ВЕРХНЯЯ СТРОКА (ШАПКА) - НЕПОДВИЖНА, НО НА МОБИЛЬНЫХ СКРЫТА ========== -->
     <div class="top-bar" id="topBar">
         <div class="container">
             <div class="site-name">ПроЗабор55</div>
@@ -582,7 +642,7 @@
         </div>
     </div>
 
-    <!-- ========== ПЕРВАЯ СЕКЦИЯ С ОТСТУПОМ ========== -->
+    <!-- ========== ПЕРВАЯ СЕКЦИЯ ========== -->
     <section id="section1" class="section">
         <div class="container">
             <div class="animated-title">
@@ -685,7 +745,7 @@
         </div>
     </section>
 
-    <!-- ========== ЧЕТВЁРТАЯ СЕКЦИЯ (ОСТАВИТЬ ЗАЯВКУ) ========== -->
+    <!-- ========== ЧЕТВЁРТАЯ СЕКЦИЯ (ФОРМА ЗАЯВКИ + МОБИЛЬНЫЕ КОНТАКТЫ) ========== -->
     <section id="section4" class="section">
         <div class="container">
             <div class="contact-text">Оставьте свои данные, и мы свяжемся с вами для бесплатного замера:</div>
@@ -702,6 +762,21 @@
                 <button type="submit" class="submit-btn">Отправить заявку</button>
             </form>
             <div id="formMessage" class="form-message"></div>
+
+            <!-- Мобильный блок с контактами (телефоны и почта) — появляется только на телефонах под формой -->
+            <div class="mobile-contacts">
+                <h4>📞 Наши контакты</h4>
+                <div class="mobile-phone">
+                    <span>📱</span> <a href="tel:+79994703699">+7 (999) 470-36-99</a>
+                </div>
+                <div class="mobile-phone">
+                    <span>📱</span> <a href="tel:+79236932228">+7 (923) 693-22-28</a>
+                </div>
+                <div class="mobile-email">
+                    <span>✉️</span> <a href="mailto:prozabor55@mail.ru">prozabor55@mail.ru</a>
+                </div>
+                <p style="font-size: 0.85rem; margin-top: 12px; opacity: 0.8;">Работаем по Омску и области</p>
+            </div>
         </div>
     </section>
 
@@ -710,7 +785,7 @@
         <button data-target="section1">Главная</button>
         <button data-target="section2">Услуги</button>
         <button data-target="section3">Каталог</button>
-        <button data-target="section4">Оставить заявку</button>
+        <button data-target="section4">Заявка</button>
     </div>
 
     <script>
@@ -726,7 +801,7 @@
         });
     });
 
-    // Кнопка "Записаться на замер" в шапке
+    // Кнопка "Записаться на замер" в шапке (на десктопе)
     const orderBtn = document.getElementById('orderBtn');
     if (orderBtn) {
         orderBtn.addEventListener('click', () => {
@@ -766,13 +841,15 @@
         });
     });
 
-    // Эффект при прокрутке: шапка становится полупрозрачной
+    // Эффект при прокрутке: шапка становится полупрозрачной (на десктопе)
     const topBar = document.getElementById('topBar');
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            topBar.classList.add('scrolled');
-        } else {
-            topBar.classList.remove('scrolled');
+        if (topBar) {
+            if (window.scrollY > 50) {
+                topBar.classList.add('scrolled');
+            } else {
+                topBar.classList.remove('scrolled');
+            }
         }
     });
 
@@ -827,6 +904,6 @@
             }
         });
     }
-</script>
+    </script>
 </body>
 </html>
