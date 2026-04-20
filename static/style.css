@@ -1,0 +1,151 @@
+/* Общие стили */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
+    line-height: 1.6;
+}
+
+/* Стили для секций */
+.section {
+    min-height: 100vh; /* каждая секция на весь экран */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: #fff;
+}
+
+.section:nth-child(even) {
+    background-color: #f9f9ff;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+p {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+/* Кнопки справа (фиксированное меню) */
+.nav-buttons {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 100;
+}
+
+.nav-buttons button {
+    background-color: #0077cc;
+    border: none;
+    color: white;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    width: 140px;
+    text-align: center;
+}
+
+.nav-buttons button:hover {
+    background-color: #005fa3;
+    transform: scale(1.05);
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 768px) {
+    .nav-buttons {
+        right: 10px;
+        gap: 8px;
+    }
+    .nav-buttons button {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+        width: 100px;
+    }
+    h2 {
+        font-size: 1.8rem;
+    }
+    p {
+        font-size: 1rem;
+    }
+}
+
+/* Стили для формы контактов */
+.contact-form {
+    max-width: 400px;
+    margin: 30px auto 0;
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    border-color: #0077cc;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0,119,204,0.3);
+}
+
+.submit-btn {
+    background-color: #0077cc;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1rem;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+.submit-btn:hover {
+    background-color: #005fa3;
+}
+
+.form-message {
+    margin-top: 20px;
+    font-weight: bold;
+    text-align: center;
+}
