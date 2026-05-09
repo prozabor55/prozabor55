@@ -1,5 +1,5 @@
 import os
-import requests
+import vk_api
 from flask import Flask, request, jsonify, render_template
 from dotenv import load_dotenv
 
@@ -7,25 +7,32 @@ load_dotenv()  # загружает переменные из .env
 
 app = Flask(__name__)
 
-TELEGRAM_TOKEN = os.environ.get('TELEGRAM_TOKEN')
-TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID')
+# Настройки VK
+VK_ACCESS_TOKEN = os.environ.get('VK_ACCESS_TOKEN')  # Ключ доступа сообщества
+VK_USER_ID = os.environ.get('VK_USER_ID')  # Ваш ID пользователя (кто получит уведомление)
 
-def send_telegram_message(text):
-    """Отправляет сообщение в личный чат с ботом."""
-    if not TELEGRAM_TOKEN or not TELEGRAM_CHAT_ID:
-        print("TELEGRAM_TOKEN или TELEGRAM_CHAT_ID не заданы!")
+def send_vk_message(text):
+    """Отправляет сообщение в VK (личное сообщение пользователю)."""
+    if not VK_ACCESS_TOKEN or not VK_USER_ID:
+        print("VK_ACCESS_TOKEN или VK_USER_ID не заданы!")
         return False
-    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
-    payload = {
-        'chat_id': TELEGRAM_CHAT_ID,
-        'text': text,
-        'parse_mode': 'HTML'
-    }
+    
     try:
-        response = requests.post(url, json=payload, timeout=10)
-        return response.status_code == 200
+        # Авторизация через токен сообщества
+        vk_session = vk_api.VkApi(token=VK_ACCESS_TOKEN)
+        vk = vk_session.get_api()
+        
+        # Отправка сообщения
+        vk.messages.send(
+            user_id=int(VK_USER_ID),  # ID получателя (администратора)
+            message=text,
+            random_id=0  # обязательный параметр для VK API
+        )
+        print("Сообщение в VK успешно отправлено")
+        return True
+        
     except Exception as e:
-        print(f"Ошибка отправки в Telegram: {e}")
+        print(f"Ошибка отправки в VK: {e}")
         return False
 
 @app.route('/')
@@ -42,12 +49,12 @@ def submit_form():
         return jsonify({'success': False, 'message': 'Имя и телефон обязательны'}), 400
 
     message = (
-        f"🆕 <b>Новая заявка с сайта ПроЗабор55</b>\n"
+        f"🆕 Новая заявка с сайта ПроЗабор55\n"
         f"👤 Имя: {name}\n"
         f"📞 Телефон: {phone}"
     )
 
-    if send_telegram_message(message):
+    if send_vk_message(message):
         return jsonify({'success': True, 'message': 'Заявка отправлена! Мы скоро свяжемся с вами.'})
     else:
         return jsonify({'success': False, 'message': 'Ошибка отправки. Пожалуйста, позвоните нам.'}), 500
